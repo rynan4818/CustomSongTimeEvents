@@ -139,12 +139,9 @@ Event Nameで設定したイベントが呼ばれた時に実行するイベン�
 10. プラットフォームモデルの親オブジェクト(Custom Platform を設定してあるオブジェクト)にInspectorウィンドウのAdd Componentで`Custom Song Time Event`を追加します。
 11. `Custom Song Time Event`の`Evnet Name`と`Event`の`Size`を1にします。
 12. Event Nameの`Element 0`にJSONスクリプトから呼ぶイベント名(この場合は、CounterRotation)を設定します。
-
-    ![image](https://user-images.githubusercontent.com/14249877/211197976-7389b49b-23c7-4aad-8d64-a91d15674749.png)
-
 13. Eventの`Element 0 ()`の＋を押して、`Animator Controller`を割り当てたオブジェクト(1で設定したオブジェクト)をHierarchyから割り当てます。
 
-![image](https://user-images.githubusercontent.com/14249877/211198044-bdc02c3e-4ed4-4bec-9819-43e03c1b5e25.png)
+    ![image](https://user-images.githubusercontent.com/14249877/211198044-bdc02c3e-4ed4-4bec-9819-43e03c1b5e25.png)
 
 14. `No Function`を`Animator.SetTrigger(string)`にして、5で設定したTriggerの名前を設定します。(この場合は、CounterRotation)
 
@@ -182,4 +179,4 @@ Event Nameで設定したイベントが呼ばれた時に実行するイベン�
 2. 曲制御のイベントは`Any State`から都度表情ごとのステートに各トリガーで遷移させます
 3. 曲制御有り譜面が終わって、曲制御無し譜面になったら、`SongTimeDisable`トリガーで`Any State`から`SongTimeDisableBlink`に遷移させます。
 
-![image](https://user-images.githubusercontent.com/14249877/211198226-4d3e7856-11be-485e-810b-ca178f9054b8.png)
+    ![image](https://user-images.githubusercontent.com/14249877/211198226-4d3e7856-11be-485e-810b-ca178f9054b8.png)
