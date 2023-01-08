@@ -99,7 +99,7 @@ Event Nameで設定したイベントが呼ばれた時に実行するイベン�
 
 ### JSONファイルの説明
 - **TimeScript** : 曲時間ごとに送信するキーのリストを配列にします。
-- **SongTime** : キー送信したい曲時間(秒)です。
+- **SongTime** : イベント発生したい曲時間(秒)です。
     - 現状は00:50 のような表記に対応していませんので1:10.5の場合は70.5と指定して下さい。
 - **Evnet** : 3Dモデルに設定した`Custom Song Time Event`の`Event Name`を指定します。
     - 同じ名前のイベント名はすべて実行されます。(Custom Sabers, Custom Avatars, Custom Platformsに該当するものがあれば全て)
