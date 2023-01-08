@@ -6,6 +6,16 @@ Custom SabersやCustom Platformsなら曲に合わせたエフェクトを出し
 
 Custom Avatars, Custom Platformsなど同時使用も可能です。
 
+## サンプル動画
+
+https://user-images.githubusercontent.com/14249877/211197517-08ff2a55-f505-4f6a-9dd4-6fd5cd8c9cdf.mp4
+
+下のサンプルスクリプトを実行した動画です。
+
+* 床にあるCustom Sabersが2.5秒で左セイバーが巨大化、12.5秒で右セイバーが巨大化
+* Custom Avatarsで5.5～7.5秒と15～18秒に表情制御で笑顔に
+* Custom Platformsで10秒と20秒に前方のノーツ数カウンター表示が回転
+
 # インストール方法
 
 ## BeatSaber本体側
@@ -33,6 +43,8 @@ Custom Avatars, Custom Platformsなど同時使用も可能です。
 
 # 使い方
 `Custom Song Time Event`には以下の設定項目があります。
+
+![image](https://user-images.githubusercontent.com/14249877/211197738-b24203e5-4173-498c-bb22-4aa71e0f8bd9.png)
 
 ## Unity
 ### Song Time Enable()
@@ -95,19 +107,50 @@ Event Nameで設定したイベントが呼ばれた時に実行するイベン�
 # Custom Platforms を使った事例
 
 1. まず、ProjectのAssetsに`Animator Controller`を作成して、イベントを与えたいオブジェクトのInspectorウィンドウに追加します。
+
+    ![image](https://user-images.githubusercontent.com/14249877/211197772-c30f10e9-8e46-436f-8f67-b0a72866d9c7.png)
+
 2. 作成した`Animator Controller`にCreate Stateで空のStateを2つ追加します。
+
+    ![image](https://user-images.githubusercontent.com/14249877/211197809-66f2c399-1a46-47a4-9fd1-53050130d65b.png)
+
 3. ProjectのAssetsに`Animation`を作成して、Animatorの2つ目に追加した灰色のStateのMotionに適用します。
+
+    ![image](https://user-images.githubusercontent.com/14249877/211197833-ae8fdf8d-d802-4e4f-a2cb-ee9d98df08fd.png)
+
 4. 追加したAnimationに変化させたい設定をします。(この事例ではRotation yを1回転します)
+
+    ![image](https://user-images.githubusercontent.com/14249877/211197849-f2cb4917-3e82-4859-b4d2-7c8f9f5319b7.png)
+
 5. Animatorの`Parameters`に`Trigger`を追加して名前をつけます。(この場合は、CounterRotation)
+
+    ![image](https://user-images.githubusercontent.com/14249877/211197890-28bd3b05-bd00-48a1-9811-ffed33f63a5c.png)
+
 6. AnimatorのNew State(オレンジ色)からNew State0(灰色)にTransitionを追加します。
 7. 6で追加したTransitionを選択して、`Has Exit Time`のチェックを外して、`Transition Durations (s)`を0にして、`Conditions`に5で追加したTriggerの名前(この場合は、CounterRotation)を選択します。
+
+    ![image](https://user-images.githubusercontent.com/14249877/211197920-91dbebf2-7767-4ade-8fa5-4fc1fbb67611.png)
+
 8. AnimatorのNew State0(灰色)からNew State(オレンジ色)にTransitionを追加します。
 9. 8で追加したTransitionを選択して、`Exit Time`を1にして、`Transition Durations (s)`を0にします。
+
+    ![image](https://user-images.githubusercontent.com/14249877/211197954-037cf1e3-c53c-4222-a81a-20061ce63e82.png)
+
 10. プラットフォームモデルの親オブジェクト(Custom Platform を設定してあるオブジェクト)にInspectorウィンドウのAdd Componentで`Custom Song Time Event`を追加します。
 11. `Custom Song Time Event`の`Evnet Name`と`Event`の`Size`を1にします。
 12. Event Nameの`Element 0`にJSONスクリプトから呼ぶイベント名(この場合は、CounterRotation)を設定します。
+
+    ![image](https://user-images.githubusercontent.com/14249877/211197976-7389b49b-23c7-4aad-8d64-a91d15674749.png)
+
 13. Eventの`Element 0 ()`の＋を押して、`Animator Controller`を割り当てたオブジェクト(1で設定したオブジェクト)をHierarchyから割り当てます。
+
+![image](https://user-images.githubusercontent.com/14249877/211198044-bdc02c3e-4ed4-4bec-9819-43e03c1b5e25.png)
+
 14. `No Function`を`Animator.SetTrigger(string)`にして、5で設定したTriggerの名前を設定します。(この場合は、CounterRotation)
+
+    ![image](https://user-images.githubusercontent.com/14249877/211198080-5f524d7c-a233-406e-b9c6-c1a4e8be4c9f.png)
+    ![image](https://user-images.githubusercontent.com/14249877/211198094-fdf5bb1f-31f7-44d9-ba45-3dbbc9839294.png)
+
 15. 譜面フォルダに`CustomSongTimeEvents.json`と言う名前で以下の様なスクリプトのJSONファイルを作成します。
 
         {
@@ -138,3 +181,5 @@ Event Nameで設定したイベントが呼ばれた時に実行するイベン�
 1. `SongTimeEnable`のトリガーで、通常待機状態の`SongTimeDisableBlink`(瞬きアニメーション)から、曲制御用のステート`SongTimeEnableBlink`に遷移させます。
 2. 曲制御のイベントは`Any State`から都度表情ごとのステートに各トリガーで遷移させます
 3. 曲制御有り譜面が終わって、曲制御無し譜面になったら、`SongTimeDisable`トリガーで`Any State`から`SongTimeDisableBlink`に遷移させます。
+
+![image](https://user-images.githubusercontent.com/14249877/211198226-4d3e7856-11be-485e-810b-ca178f9054b8.png)
