@@ -4,7 +4,11 @@
 
 Custom SabersやCustom Platformsなら曲に合わせたエフェクトを出したり、Custom Avatarsなら曲に合わせて表情制御したりできます。
 
-Custom Avatars, Custom Platformsなど同時使用も可能です。
+Custom Sabers, Custom Avatars, Custom Platformsは同時使用も可能です。
+
+ChroMapper上でCustom Platforms, Custom Avatarsをプレビューするプラグインもあります。
+
+※Custom AvatarsをChroMapperで表示するには、[ChroMapper-CameraMovement](https://github.com/rynan4818/ChroMapper-CameraMovement)が必要です。
 
 ## サンプル動画
 
@@ -40,6 +44,14 @@ https://user-images.githubusercontent.com/14249877/211197517-08ff2a55-f505-4f6a-
     * `Hierarchy`でアバターモデルの親オブジェクト(Avatar Descriptor や Event Manager を設定してあるオブジェクト)にInspectorウィンドウのAdd Componentで`Custom Song Time Event`を追加します。
     ### Custom Platforms
     * `Hierarchy`でプラットフォームモデルの親オブジェクト(Custom Platform を設定してあるオブジェクト)にInspectorウィンドウのAdd Componentで`Custom Song Time Event`を追加します。
+
+## ChroMapper用プレビュー
+
+1.  [リリースページ](https://github.com/rynan4818/CustomSongTimeEvents/releases)から最新のCustomSongTimeEvents ChroMapper用のリリースをダウンロードします。
+
+    (ChroMapper-CustomSongTimeEvents-*.*.*.zip のCustomSongTimeEvents.dllを入れて下さい。 間違えると動かないので注意して下さい)
+
+2. ダウンロードしたzipファイルを解凍してChroMapperのインストールフォルダにある`Plugins`フォルダに`CustomSongTimeEvents.dll`をコピーします。
 
 # 使い方
 `Custom Song Time Event`には以下の設定項目があります。
@@ -103,6 +115,22 @@ Event Nameで設定したイベントが呼ばれた時に実行するイベン�
     - 現状は00:50 のような表記に対応していませんので1:10.5の場合は70.5と指定して下さい。
 - **Evnet** : 3Dモデルに設定した`Custom Song Time Event`の`Event Name`を指定します。
     - 同じ名前のイベント名はすべて実行されます。(Custom Sabers, Custom Avatars, Custom Platformsに該当するものがあれば全て)
+
+## ChroMapper
+
+CustomSongTimeEventsを適用したCustom Platforms, Custom AvatarsをChroMapperで読み込んだ時に、譜面フォルダにある`CustomSongTimeEvents.json`を読み込んでイベントをプレビューします。
+
+Custom Platformsは譜面のSong InfoのCUSTOM PLATFORMで設定します。
+
+Custom Avatarsは[ChroMapper-CameraMovement](https://github.com/rynan4818/ChroMapper-CameraMovement)で読み込みます。
+
+譜面エディタと言う特性上、逆方向にプレビューが可能なためモデルのAnimator Controllerの作りによっては正しく動作しない可能性があります。
+
+再生時間が戻った場合はスクリプトを0から実行するため、再生時間まで高速にイベントが発生します。また、一時停止した場合も、ChroMapperが一番近いグリッドにスナップするため、逆方向に戻る場合があります。
+
+Animator Controllerの設定をSong Time Enableイベントでリセットするような作りにすると上手くいくと思います。
+
+スクリプト`CustomSongTimeEvents.json`ファイルが更新されると、自動で再読み込みします。
 
 # Custom Platforms を使った事例
 
