@@ -85,7 +85,7 @@ namespace CustomSongTimeEvents.Models
         {
             if (eventID >= _timeScript.Count)
                 return null;
-            if (_timeScript[eventID].SongTime <= songtime)
+            if (songtime != 0f && _timeScript[eventID].SongTime <= songtime)
             {
 #if DEBUG
                 Plugin.Log.Info($"EventID:{eventID}");
