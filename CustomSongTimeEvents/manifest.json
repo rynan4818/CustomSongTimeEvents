@@ -5,9 +5,9 @@
   "author": "Rynan",
   "version": "0.2.1",
   "description": "Execute Custom* mod events according to the time of the song",
-  "gameVersion": "1.20.0",
+  "gameVersion": "1.36.0",
   "dependsOn": {
-    "BSIPA": "^4.2.0",
-    "SiraUtil": "^3.0.0"
+    "BSIPA": "^4.3.3",
+    "SiraUtil": "^3.1.8"
   }
 }

@@ -28,8 +28,8 @@ namespace CustomSongTimeEvents.Models
         {
             _songTimeEnable = false;
             _startEventSend = false;
-            if (PluginConfig.Instance.songSpecificScript && CustomPreviewBeatmapLevelPatch.customLevelPath != String.Empty)
-                _songTimeEnable = _data.LoadSongTimeData(CustomPreviewBeatmapLevelPatch.customLevelPath);
+            if (PluginConfig.Instance.songSpecificScript && SongTimeEventScriptBeatmapPatch.customLevelPath != String.Empty)
+                _songTimeEnable = _data.LoadSongTimeData(SongTimeEventScriptBeatmapPatch.customLevelPath);
             else
                 _songTimeEnable = _data.LoadSongTimeData();
             if (!_songTimeEnable)
