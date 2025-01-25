@@ -13,11 +13,14 @@ namespace CustomSongTimeEvents.Models
     {
         public float SongTime;
         public string Event;
+        public string Object;
+        public bool? ObjectActive;
+        public int? ObjectLayer;
     }
     public class SongTimeData : IInitializable
     {
-        public string scriptPath = "";
         public List<SongTimeScript> _timeScript = new List<SongTimeScript>();
+        public Dictionary<string, string> _objectList = new Dictionary<string, string>();
         public int eventID;
 
         public void Initialize()
@@ -33,7 +36,6 @@ namespace CustomSongTimeEvents.Models
         }
         public bool LoadFromJson(string jsonString)
         {
-            _timeScript.Clear();
             SongTimeScriptJson songTimeScriptJson = null;
             string sep = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
             string sepCheck = (sep == "." ? "," : ".");
@@ -47,34 +49,43 @@ namespace CustomSongTimeEvents.Models
             }
             if (songTimeScriptJson == null)
                 return false;
+            foreach (JSONObjectList jsonObjectList in songTimeScriptJson.JsonObjectList)
+            {
+                if (!this._objectList.TryAdd(jsonObjectList.Name, jsonObjectList.Path))
+                    Plugin.Log.Error($"ObjectList Name Duplicate Error: {jsonObjectList.Name}, {jsonObjectList.Path}");
+            }
             foreach (JSONTimeScript jsonTimeScript in songTimeScriptJson.JsonTimeScript)
             {
-                SongTimeScript newScript = new SongTimeScript();
-                newScript.SongTime = float.Parse(jsonTimeScript.SongTime.Contains(sepCheck) ? jsonTimeScript.SongTime.Replace(sepCheck, sep) : jsonTimeScript.SongTime);
-                newScript.Event = jsonTimeScript.Event;
-                _timeScript.Add(newScript);
+                var newScript = new SongTimeScript
+                {
+                    SongTime = float.Parse(jsonTimeScript.SongTime.Contains(sepCheck) ? jsonTimeScript.SongTime.Replace(sepCheck, sep) : jsonTimeScript.SongTime),
+                    Event = jsonTimeScript.Event,
+                    Object = jsonTimeScript.Object,
+                    ObjectActive = jsonTimeScript.ObjectActive,
+                    ObjectLayer = jsonTimeScript.ObjectLayer
+                };
+                this._timeScript.Add(newScript);
             }
-            _timeScript = _timeScript.OrderBy(x => x.SongTime).ToList();
+            this._timeScript = this._timeScript.OrderBy(x => x.SongTime).ToList();
             return true;
         }
         public bool LoadSongTimeData(string path = null)
         {
+            this._timeScript.Clear();
+            this._objectList.Clear();
             if (path == null)
                 path = PluginConfig.Instance.songTimeScriptPath;
             if (!File.Exists(path))
                 return false;
-            if (scriptPath == path)
-                return true;
             string jsonText = File.ReadAllText(path);
             if (!LoadFromJson(jsonText))
                 return false;
-            if (_timeScript.Count == 0)
+            if (this._timeScript.Count == 0)
             {
                 Plugin.Log.Notice("No Song TIme Event data!");
                 return false;
             }
-            Plugin.Log.Notice($"Found {_timeScript.Count} entries in: {path}");
-            scriptPath = path;
+            Plugin.Log.Notice($"Found {this._timeScript.Count} entries in: {path}");
             return true;
         }
         public void ResetEventID()
@@ -83,14 +94,14 @@ namespace CustomSongTimeEvents.Models
         }
         public SongTimeScript UpdateEvent(float songtime)
         {
-            if (eventID >= _timeScript.Count)
+            if (eventID >= this._timeScript.Count)
                 return null;
-            if (songtime != 0f && _timeScript[eventID].SongTime <= songtime)
+            if (this._timeScript[eventID].SongTime <= songtime)
             {
 #if DEBUG
-                Plugin.Log.Info($"EventID:{eventID}");
+                Plugin.Log.Info($"EventID={eventID} : {songtime}sec");
 #endif
-                return _timeScript[eventID++];
+                return this._timeScript[eventID++];
             }
             else
                 return null;
