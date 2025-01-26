@@ -81,36 +81,34 @@ namespace CustomSongTimeEvents.Models
                     this._startEventSend = true;
                 }
             }
-            var timeEvent = this._data.UpdateEvent(this._audioTimeSource.songTime);
-            if (timeEvent == null)
-                return;
-            if (timeEvent.Event != null)
+            SongTimeScript timeEvent;
+            while (true)
             {
-                SongTimeEventTrigger.SongTimeEvnet(timeEvent.Event);
+                timeEvent = this._data.UpdateEvent(this._audioTimeSource.songTime);
+                if (timeEvent == null)
+                    return;
+                if (timeEvent.Event != null)
+                {
+                    SongTimeEventTrigger.SongTimeEvnet(timeEvent.Event);
 #if DEBUG
                 Plugin.Log.Info($"{timeEvent.Event}");
 #endif
-            }
-            if (timeEvent.Object != null)
-            {
-                if (this._gameObjects.TryGetValue(timeEvent.Object, out var obj))
+                }
+                if (timeEvent.Object != null && this._gameObjects.TryGetValue(timeEvent.Object, out var obj) && obj.Item1 != null)
                 {
-                    if (obj.Item1 != null)
+                    if (timeEvent.ObjectActive != null)
                     {
-                        if (timeEvent.ObjectActive != null)
-                        {
-                            obj.Item1.SetActive((bool)timeEvent.ObjectActive);
+                        obj.Item1.SetActive((bool)timeEvent.ObjectActive);
 #if DEBUG
-                            Plugin.Log.Info($"{timeEvent.Object} : Active {timeEvent.ObjectActive}");
+                    Plugin.Log.Info($"{timeEvent.Object} : Active {timeEvent.ObjectActive}");
 #endif
-                        }
-                        if (timeEvent.ObjectLayer != null)
-                        {
-                            obj.Item1.layer = (int)timeEvent.ObjectLayer;
+                    }
+                    if (timeEvent.ObjectLayer != null)
+                    {
+                        obj.Item1.layer = (int)timeEvent.ObjectLayer;
 #if DEBUG
-                            Plugin.Log.Info($"{timeEvent.Object} : Layer {timeEvent.ObjectLayer}");
+                    Plugin.Log.Info($"{timeEvent.Object} : Layer {timeEvent.ObjectLayer}");
 #endif
-                        }
                     }
                 }
             }
