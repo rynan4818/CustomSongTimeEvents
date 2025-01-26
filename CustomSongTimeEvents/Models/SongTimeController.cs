@@ -120,9 +120,10 @@ namespace CustomSongTimeEvents.Models
             Plugin.Log.Info($"Song Start: {this._frameCount}frame");
 #endif
             this._songStartCheck = true;
-            this._gameObjects.Clear();
             foreach (var objectList in this._data._objectList)
             {
+                if (this._gameObjects.ContainsKey(objectList.Key))
+                    continue;
                 var obj = GameObject.Find(objectList.Value.Item1);
                 if (obj == null)
                 {
@@ -142,6 +143,8 @@ namespace CustomSongTimeEvents.Models
                         obj.SetActive((bool)objectList.Value.Item2);
                     if (objectList.Value.Item3 != null)
                         obj.layer = (int)objectList.Value.Item3;
+                    if (objectList.Value.Item4 != null)
+                        obj.name = objectList.Value.Item4;
 #if DEBUG
                     Plugin.Log.Info($"Found: {objectList.Key}");
 #endif
