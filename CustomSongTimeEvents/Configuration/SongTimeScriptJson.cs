@@ -17,6 +17,8 @@ namespace CustomSongTimeEvents.Configuration
     {
         public string Name { get; set; }
         public string Path { get; set; }
+        public bool? Active { get; set; }
+        public int? Layer { get; set; }
     }
 
     public class SongTimeScriptJson

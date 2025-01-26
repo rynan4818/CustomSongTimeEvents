@@ -20,6 +20,7 @@ namespace CustomSongTimeEvents.Models
         public bool _startEventSend;
         public bool _songStartCheck;
         public Dictionary<string, (GameObject, int)> _gameObjects = new Dictionary<string, (GameObject, int)>();
+        public uint _frameCount;
 
         [Inject]
         private void Constractor(IAudioTimeSource audioTimeSource, SongTimeData _data)
@@ -58,14 +59,17 @@ namespace CustomSongTimeEvents.Models
             this._gameObjects.Clear();
         }
 
-        public void Update()
+        public void LateUpdate()
         {
             if (!this._songTimeEnable)
                 return;
+            this._frameCount++;
+            if (!this._audioTimeSource.isReady && !this._songStartCheck && this._frameCount > PluginConfig.Instance.startCheckFrame)
+                this.SongStartCheck();
             if (!this._audioTimeSource.isReady)
                 return;
             if (!this._songStartCheck)
-                this.SongStartCheck();
+                this.SongStartCheck(false);
             if (!this._startEventSend)
             {
                 if (this._audioTimeSource.songTime > PluginConfig.Instance.songStartTime)
@@ -112,18 +116,34 @@ namespace CustomSongTimeEvents.Models
             }
         }
 
-        public void SongStartCheck()
+        public void SongStartCheck(bool reCheck = true)
         {
+#if DEBUG
+            Plugin.Log.Info($"Song Start: {this._frameCount}frame");
+#endif
             this._songStartCheck = true;
+            this._gameObjects.Clear();
             foreach (var objectList in this._data._objectList)
             {
-                var obj = GameObject.Find(objectList.Value);
+                var obj = GameObject.Find(objectList.Value.Item1);
                 if (obj == null)
-                    Plugin.Log.Error($"Not Found Game Object: {objectList.Key}");
+                {
+                    if (!reCheck)
+                        Plugin.Log.Error($"Not Found Game Object: {objectList.Key}");
+                    if (reCheck)
+                        this._songStartCheck = false;
+                }
                 else
                 {
                     if (!this._gameObjects.TryAdd(objectList.Key, (obj, obj.layer)))
+                    {
                         Plugin.Log.Error($"GameObjects Name Duplicate Error: {objectList.Key}");
+                        continue;
+                    }
+                    if (objectList.Value.Item2 != null)
+                        obj.SetActive((bool)objectList.Value.Item2);
+                    if (objectList.Value.Item3 != null)
+                        obj.layer = (int)objectList.Value.Item3;
 #if DEBUG
                     Plugin.Log.Info($"Found: {objectList.Key}");
 #endif

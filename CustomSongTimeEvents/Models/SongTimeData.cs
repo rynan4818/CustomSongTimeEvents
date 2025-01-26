@@ -20,7 +20,7 @@ namespace CustomSongTimeEvents.Models
     public class SongTimeData : IInitializable
     {
         public List<SongTimeScript> _timeScript = new List<SongTimeScript>();
-        public Dictionary<string, string> _objectList = new Dictionary<string, string>();
+        public Dictionary<string, (string, bool?, int?)> _objectList = new Dictionary<string, (string, bool?, int?)>();
         public int eventID;
 
         public void Initialize()
@@ -51,7 +51,7 @@ namespace CustomSongTimeEvents.Models
                 return false;
             foreach (JSONObjectList jsonObjectList in songTimeScriptJson.JsonObjectList)
             {
-                if (!this._objectList.TryAdd(jsonObjectList.Name, jsonObjectList.Path))
+                if (!this._objectList.TryAdd(jsonObjectList.Name, (jsonObjectList.Path, jsonObjectList.Active, jsonObjectList.Layer)))
                     Plugin.Log.Error($"ObjectList Name Duplicate Error: {jsonObjectList.Name}, {jsonObjectList.Path}");
             }
             foreach (JSONTimeScript jsonTimeScript in songTimeScriptJson.JsonTimeScript)
