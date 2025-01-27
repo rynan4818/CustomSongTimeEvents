@@ -36,6 +36,11 @@ namespace CustomSongTimeEvents.Configuration
         public virtual int startCheckFrame { get; set; } = 0;
 
         /// <summary>
+        /// 曲スタート後にオブジェクト調査チェック終了するフレーム数
+        /// </summary>
+        public virtual int endCheckFrame { get; set; } = 3;
+
+        /// <summary>
         /// これは、BSIPAが設定ファイルを読み込むたびに（ファイルの変更が検出されたときを含めて）呼び出されます。
         /// </summary>
         public virtual void OnReload()

@@ -21,6 +21,7 @@ namespace CustomSongTimeEvents.Models
         public bool _songStartCheck;
         public Dictionary<string, (GameObject, int)> _gameObjects = new Dictionary<string, (GameObject, int)>();
         public uint _frameCount;
+        public uint _songStartFrame;
 
         [Inject]
         private void Constractor(IAudioTimeSource audioTimeSource, SongTimeData _data)
@@ -68,8 +69,12 @@ namespace CustomSongTimeEvents.Models
                 this.SongStartCheck();
             if (!this._audioTimeSource.isReady)
                 return;
+            if (this._songStartFrame == 0)
+                this._songStartFrame = this._frameCount;
             if (!this._songStartCheck)
-                this.SongStartCheck(false);
+                this.SongStartCheck(this._frameCount - this._songStartFrame < PluginConfig.Instance.endCheckFrame);
+            if (!this._songStartCheck)
+                return;
             if (!this._startEventSend)
             {
                 if (this._audioTimeSource.songTime > PluginConfig.Instance.songStartTime)
@@ -117,7 +122,7 @@ namespace CustomSongTimeEvents.Models
         public void SongStartCheck(bool reCheck = true)
         {
 #if DEBUG
-            Plugin.Log.Info($"Song Start: {this._frameCount}frame");
+            Plugin.Log.Info($"Song Start {this._audioTimeSource.isReady}: {this._frameCount}frame");
 #endif
             this._songStartCheck = true;
             foreach (var objectList in this._data._objectList)
