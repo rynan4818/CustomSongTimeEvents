@@ -199,7 +199,7 @@ Animator Controllerの設定をSong Time Enableイベントでリセットする
 
     Custom Sabers, Custom Avatarsもやり方は基本的に同じです。
 
-# Song Time Enable/Disable を使った事例
+## Song Time Enable/Disable を使った事例
 
 例えばCustom Avatarsでコンボ数等に応じた表情変化をさせている時に、曲時間制御がある譜面のときはSong Time Enableのイベントで別に遷移させて、コンボ数等のイベントを受け付けない様にできます。
 
