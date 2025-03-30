@@ -3,7 +3,7 @@
   "id": "CustomSongTimeEvents",
   "name": "CustomSongTimeEvents",
   "author": "Rynan",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Execute Custom* mod events according to the time of the song",
   "gameVersion": "1.20.0",
   "dependsOn": {
