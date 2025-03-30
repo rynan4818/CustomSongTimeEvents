@@ -340,7 +340,9 @@ ObjectListのPathで指定するパス名は、BeatSaberゲームプレイ中の
 
 変更したいオブジェクト名を検索して、見つかったオブジェクトのActive状態を変更して、どれが対象か１つづず調べて行きます。
 
-見つかったオブジェクトのフルパス名をコピーして、ObjectListのPathで指定してください。
+見つかったオブジェクトのフルパス名をコピーして、先頭に`/`を追加してObjectListのPathで指定してください。
+
+![image](https://github.com/user-attachments/assets/06e94377-5ef2-474a-b80f-25c1f917508e)
 
 # 設定ファイル(UserData/CustomSongTimeEvents.json)について
 
