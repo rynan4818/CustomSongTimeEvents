@@ -53,7 +53,7 @@ https://user-images.githubusercontent.com/14249877/211197517-08ff2a55-f505-4f6a-
 
 2. ダウンロードしたzipファイルを解凍してChroMapperのインストールフォルダにある`Plugins`フォルダに`CustomSongTimeEvents.dll`をコピーします。
 
-# 使い方
+# 使い方 (Unity イベント編)
 `Custom Song Time Event`には以下の設定項目があります。
 
 ![image](https://user-images.githubusercontent.com/14249877/211197738-b24203e5-4173-498c-bb22-4aa71e0f8bd9.png)
@@ -111,10 +111,10 @@ Event Nameで設定したイベントが呼ばれた時に実行するイベン�
 
 ### JSONファイルの説明
 - **TimeScript** : 曲時間ごとにイベントのリストを配列にします。
-- **SongTime** : イベント発生したい曲時間(秒)です。
-    - 現状は00:50 のような表記に対応していませんので1:10.5の場合は70.5と指定して下さい。
-- **Evnet** : 3Dモデルに設定した`Custom Song Time Event`の`Event Name`を指定します。
-    - 同じ名前のイベント名はすべて実行されます。(Custom Sabers, Custom Avatars, Custom Platformsに該当するものがあれば全て)
+    - **SongTime** : 文字列 : イベント発生したい曲時間(秒)です。
+        - 現状は00:50 のような表記に対応していませんので1:10.5の場合は70.5と指定して下さい。
+    - **Evnet** : 文字列 : 3Dモデルに設定した`Custom Song Time Event`の`Event Name`を指定します。
+        - 同じ名前のイベント名はすべて実行されます。(Custom Sabers, Custom Avatars, Custom Platformsに該当するものがあれば全て)
 
 ## ChroMapper
 
@@ -132,7 +132,7 @@ Animator Controllerの設定をSong Time Enableイベントでリセットする
 
 スクリプト`CustomSongTimeEvents.json`ファイルが更新されると、自動で再読み込みします。
 
-# Custom Platforms を使った事例
+## Custom Platforms を使った事例
 
 1. まず、ProjectのAssetsに`Animator Controller`を作成して、イベントを与えたいオブジェクトのInspectorウィンドウに追加します。
 
@@ -208,3 +208,148 @@ Animator Controllerの設定をSong Time Enableイベントでリセットする
 3. 曲制御有り譜面が終わって、曲制御無し譜面になったら、`SongTimeDisable`トリガーで`Any State`から`SongTimeDisableBlink`に遷移させます。
 
     ![image](https://user-images.githubusercontent.com/14249877/211198226-4d3e7856-11be-485e-810b-ca178f9054b8.png)
+
+# 使い方 (任意オブジェクト操作編)
+
+BeatSaber本体用のCustomSongTimeEventsには、ゲーム内の任意オブジェクトのActive状態と表示レイヤーを変更する機能があります。
+
+ゲーム内に存在するオブジェクト（アバター、セイバー、プラットフォームなど）を指定したタイミングで変更できます。
+
+次の例はNalulunaSaberを使って、左右のセイバー表示を切り替えます（最初の5秒間は左右セイバー表示OFF, 5秒後に右セイバー表示, 10秒後に右セイバーを非表示して、左セイバーを表示）
+
+複数のモデルとトレイルを合成したセイバーを用意すれば、個別にセイバーを切り替えることができます。
+
+NalulunaSaberはトレイルのマテリアルをゲームオブジェクトとして`/NalulunaTrailRenderer`として作成してくれます。ただし名前が全て`NalulunaTrailRenderer`のため区別がつかないため、リネームして、このオブジェクトのActive状態を変更することで、任意のトレイルもON/OFFすることができます。
+
+    {
+      "ObjectList" :[
+        {
+          "Name" : "LeftSaber",
+          "Path" : "/Wrapper/StandardGameplay/LocalPlayerGameCore/Origin/VRGameCore/LeftHand/LeftSaber/NalulunaSaber",
+          "Active" : false
+        },
+        {
+          "Name" : "RightSaber",
+          "Path" : "/Wrapper/StandardGameplay/LocalPlayerGameCore/Origin/VRGameCore/RightHand/RightSaber/NalulunaSaber",
+          "Active" : false
+        },
+        {
+          "Name" : "LeftTrail1",
+          "Path" : "/NalulunaTrailRenderer",
+          "Active" : false,
+          "Rename" : "TraiRenderer1"
+        },
+        {
+          "Name" : "LeftTrail2",
+          "Path" : "/NalulunaTrailRenderer",
+          "Active" : false,
+          "Rename" : "TraiRenderer2"
+        },
+        {
+          "Name" : "RightTrail1",
+          "Path" : "/NalulunaTrailRenderer",
+          "Active" : false,
+          "Rename" : "TraiRenderer3"
+        },
+        {
+          "Name" : "RightTrail2",
+          "Path" : "/NalulunaTrailRenderer",
+          "Active" : false,
+          "Rename" : "TraiRenderer4"
+        }
+      ],
+      "TimeScript" :[
+        {
+          "SongTime" : "5",
+          "Object" : "RightSaber",
+          "ObjectActive" : true
+        },
+        {
+          "SongTime" : "5",
+          "Object" : "RightTrail1",
+          "ObjectActive" : true
+        },
+        {
+          "SongTime" : "5",
+          "Object" : "RightTrail2",
+          "ObjectActive" : true
+        },
+        {
+          "SongTime" : "10",
+          "Object" : "RightSaber",
+          "ObjectActive" : false
+        },
+        {
+          "SongTime" : "10",
+          "Object" : "RightTrail1",
+          "ObjectActive" : false
+        },
+        {
+          "SongTime" : "10",
+          "Object" : "RightTrail2",
+          "ObjectActive" : false
+        },
+        {
+          "SongTime" : "10",
+          "Object" : "LeftSaber",
+          "ObjectActive" : true
+        },
+        {
+          "SongTime" : "10",
+          "Object" : "LeftTrail1",
+          "ObjectActive" : true
+        },
+        {
+          "SongTime" : "10",
+          "Object" : "LeftTrail2",
+          "ObjectActive" : true
+        }
+      ]
+    }
+
+### JSONファイルの説明
+- **ObjectList** : 操作したいオブジェクト
+    - **Name** : 文字列 : 検索したオブジェクトに付ける名前で、TimeScriptの方でObjectで指定します。
+        - Nameは他のNameと重複しないようにしてください。
+    - **Path** : 文字列 : 検索するActiveなオブジェクトのパス名です。
+        - オブジェクト名だけでも検索できますが、できるだけフルパスで記載してください。[GameObject.Find](https://www.google.com/search?q=GameObject.Find)で検索します。Active状態のオブジェクトしか検索できないので注意してください。
+    - **Active** : bool値 : 見つかったオブジェクトの初期Active状態を設定します。
+        - true か false で設定してください。[GameObject.SetActive](https://www.google.com/search?q=GameObject.SetActive)で設定します。Active状態は親オブジェクトを非Activeにすれば子も非Activeになります。
+    - **Layer** : 数値 : 見つかったオブジェクトの初期レイヤー値を設定します。
+        - 文字列("0"～"32")ではなく、整数(0～31)で設定してください。[GameObject.layer](https://www.google.com/search?q=GameObject.layer)の値を変更します。レイヤー番号は[私が以前調べた](https://github.com/rynan4818/StagePositionViewer/blob/d30c61de57cf3238fc1f92ab18ebbd8834d76b2e/StagePositionViewer/Views/StagePositionUI.cs#L321-L352)ものなどを参考にしてください。レイヤーは子オブジェクトも一つずつ変更する必要があります。
+    - **Rename** : 文字列 : 見つかったオブジェクトの名前をリネームします。
+        - GameObject.Findは最初に見つかったActiveなオブジェクトを１つだけ見つけられます。同じフルパス名のオブジェクトの２つ目以降を見つけられないため、見つかったオブジェクトの名前を変更して、同じPathでもう一度検索することで２つ目以降も見つけることができます。主にmodで動的にオブジェクトを作ってる物を対象にしています。もし他でオブジェクト名を手がかりにしている場合、変更することで問題が発生することもありえますが、通常は問題にならない場合が殆どだと思います。
+- **TimeScript** : 文字列 : 曲時間ごとにイベントのリストを配列にします。ちなみに、Evnetも同時に指定可能です。
+    - **SongTime** : イベント発生したい曲時間(秒)です。
+        - 現状は00:50 のような表記に対応していませんので1:10.5の場合は70.5と指定して下さい。
+    - **Object** : 文字列 : ObjectListのNameで設定した操作対象のオブジェクトを指定します。
+    - **ObjectActive** : bool値 : 指定したオブジェクトのActive状態を設定します。
+        - true か false で設定してください。[GameObject.SetActive](https://www.google.com/search?q=GameObject.SetActive)で設定します。Active状態は親オブジェクトを非Activeにすれば子も非Activeになります。
+    - **ObjectLayer** : 数値 : 見つかったオブジェクトの初期レイヤー値を設定します。
+        - 文字列("0"～"32")ではなく、整数(0～31)で設定してください。[GameObject.layer](https://www.google.com/search?q=GameObject.layer)の値を変更します。レイヤー番号は[私が以前調べた](https://github.com/rynan4818/StagePositionViewer/blob/d30c61de57cf3238fc1f92ab18ebbd8834d76b2e/StagePositionViewer/Views/StagePositionUI.cs#L321-L352)ものなどを参考にしてください。レイヤーは子オブジェクトも一つずつ変更する必要があります。
+
+ObjectListのPathは、譜面プレイ開始時にActiveなオブジェクトを全検索します。見つからないオブジェクトがある場合は、デフォルトでは開始3フレーム目まで調査を続けます。もし、対象のmodの挙動によりもっと調査が必要な場合は、設定ファイル(UserData/CustomSongTimeEvents.json)の`endCheckFrame`の数値を1つづつ増やしてみてください。ただし、オブジェクトの全検索は重いので、あまり大きな数値を設定するとプレイに影響する可能性があります。
+
+## オブジェクトの探し方
+
+ObjectListのPathで指定するパス名は、BeatSaberゲームプレイ中のシーンのHierarchyの状態でのパス名になります。つまり、実際にBeatSaberが起動している状態で調べる必要があります。
+
+調べ方はBeatSaberのmod(BSIPA)に対応した[Runtime Unity Editor](https://github.com/Caeden117/RuntimeUnityEditor)を使う必要があります。DLLはBSIPAのDiscordサーバのpc-mod-devチャンネルの[2021/12/15のCaeden117さんの投稿](https://discord.com/channels/441805394323439646/443146108420620318/920513085180104795)にあります。リンクが飛ばない場合は、`Runtime Unity Editor BSIPA 4`で検索してみて下さい。`RuntimeUnityEditor_BSIPA4.zip`のファイルがそうです。
+
+使い方は、BeatSaberを通常状態(fpfcモードは挙動が異なるのでパスが変わる場合があり、調査時は避けてください)で起動して、NF状態で適当な譜面をプレイして`G`キーを押すと、現在のゲームオブジェクトのHierarchyが表示されます。
+
+変更したいオブジェクト名を検索して、見つかったオブジェクトのActive状態を変更して、どれが対象か１つづず調べて行きます。
+
+見つかったオブジェクトのフルパス名をコピーして、ObjectListのPathで指定してください。
+
+# 設定ファイル(UserData/CustomSongTimeEvents.json)について
+
+modの設定ファイルは`Beat Saber/UserData/CustomSongTimeEvents.json`にあり、挙動を変更することができます。
+
+| 設定名 | デフォルト値 | 内容 |
+| ------ | ------------ | ---- |
+| songTimeScriptPath | `UserData\CustomSongTimeEvents\DefaultSongTimeEvents.json` | 曲専用スクリプトが無い場合にデフォルトで動作するスクリプト |
+| songSpecificScript | true | 曲専用SongTimeEventsスクリプトの有効・無効 |
+| songStartTime | 0 | SongTimeEnable/Disableイベント発生曲時間 |
+| startCheckFrame | 0 | オブジェクト調査チェックをする開始フレーム遅延数 |
+| endCheckFrame | 3 | 曲スタート後にオブジェクト調査チェック終了するフレーム数 |
