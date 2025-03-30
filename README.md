@@ -334,7 +334,7 @@ ObjectListのPathは、譜面プレイ開始時にActiveなオブジェクトを
 
 ObjectListのPathで指定するパス名は、BeatSaberゲームプレイ中のシーンのHierarchyの状態でのパス名になります。つまり、実際にBeatSaberが起動している状態で調べる必要があります。
 
-調べ方はBeatSaberのmod(BSIPA)に対応した[Runtime Unity Editor](https://github.com/Caeden117/RuntimeUnityEditor)を使う必要があります。DLLはBSIPAのDiscordサーバのpc-mod-devチャンネルの[2021/12/15のCaeden117さんの投稿](https://discord.com/channels/441805394323439646/443146108420620318/920513085180104795)にあります。リンクが飛ばない場合は、`Runtime Unity Editor BSIPA 4`で検索してみて下さい。`RuntimeUnityEditor_BSIPA4.zip`のファイルがそうです。
+調べ方はBeatSaberのmod(BSIPA)に対応した[Runtime Unity Editor](https://github.com/Caeden117/RuntimeUnityEditor)を使う必要があります。DLLは[BSMG](https://bsmg.wiki/ja/)のDiscordサーバのpc-mod-devチャンネルの[2021/12/15のCaeden117さんの投稿](https://discord.com/channels/441805394323439646/443146108420620318/920513085180104795)にあります。リンクが飛ばない場合は、`Runtime Unity Editor BSIPA 4`で検索してみて下さい。`RuntimeUnityEditor_BSIPA4.zip`のファイルがそうです。
 
 使い方は、BeatSaberを通常状態(fpfcモードは挙動が異なるのでパスが変わる場合があり、調査時は避けてください)で起動して、NF状態で適当な譜面をプレイして`G`キーを押すと、現在のゲームオブジェクトのHierarchyが表示されます。
 
