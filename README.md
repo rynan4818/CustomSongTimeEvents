@@ -325,7 +325,7 @@ NalulunaSaberはトレイルのマテリアルをゲームオブジェクトと�
     - **Object** : 文字列 : ObjectListのNameで設定した操作対象のオブジェクトを指定します。
     - **ObjectActive** : bool値 : 指定したオブジェクトのActive状態を設定します。
         - true か false で設定してください。[GameObject.SetActive](https://www.google.com/search?q=GameObject.SetActive)で設定します。Active状態は親オブジェクトを非Activeにすれば子も非Activeになります。
-    - **ObjectLayer** : 数値 : 見つかったオブジェクトの初期レイヤー値を設定します。
+    - **ObjectLayer** : 数値 : 指定したオブジェクトのレイヤー値を設定します。
         - 文字列("0"～"32")ではなく、整数(0～31)で設定してください。[GameObject.layer](https://www.google.com/search?q=GameObject.layer)の値を変更します。レイヤー番号は[私が以前調べた](https://github.com/rynan4818/StagePositionViewer/blob/d30c61de57cf3238fc1f92ab18ebbd8834d76b2e/StagePositionViewer/Views/StagePositionUI.cs#L321-L352)ものなどを参考にしてください。レイヤーは子オブジェクトも一つずつ変更する必要があります。
 
 ObjectListのPathは、譜面プレイ開始時にActiveなオブジェクトを全検索します。見つからないオブジェクトがある場合は、デフォルトでは開始3フレーム目まで調査を続けます。もし、対象のmodの挙動によりもっと調査が必要な場合は、設定ファイル(UserData/CustomSongTimeEvents.json)の`endCheckFrame`の数値を1つづつ増やしてみてください。ただし、オブジェクトの全検索は重いので、あまり大きな数値を設定するとプレイに影響する可能性があります。
